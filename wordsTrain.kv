@@ -1,0 +1,121 @@
+#:kivy 1.10.1
+
+#:import Factory kivy.factory.Factory
+
+<AppScreens@ScreenManager>:
+	MainScreen:
+		id: mainScr
+	DictionaryScreen:
+		id: dictScr
+
+<MainScreen>:
+	name: "mainScr"
+
+	BoxLayout:
+		orientation: 'vertical'
+
+		Label:
+			text: "Main screen"
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint_y: None
+			height: dp(50)
+
+			Button:
+				text: "Dictionary"
+				on_release:
+					app.screen.transition.direction = 'right'
+					app.screen.current = 'dictScr'
+
+			Button:
+				text: "Settings"
+
+<DictionaryScreen>:
+	name: "dictScr"
+
+	BoxLayout:
+		orientation: 'vertical'
+
+		RecycleView:
+			id: dict_rv
+			key_viewclass: 'viewclass'
+			data: root.getWordsRecycleData()
+
+			RecycleBoxLayout:
+				orientation: 'vertical'
+				default_size: None, dp(80)
+				default_size_hint: 1, None
+				size_hint_y: None
+				height: self.minimum_height
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint_y: None
+			height: dp(50)
+
+			Button:
+				text: "Add word"
+				on_release: Factory.NewWordPopup().open()
+
+			Button:
+				text: "Back"
+				on_release:
+					app.screen.transition.direction = 'left'
+					app.screen.current = 'mainScr'
+
+<WordListElem>:
+	Label:
+		text: "Word"
+
+<NewWordPopup>:
+	title: "New word"
+	size_hint: None, None
+	width: dp(300)
+	height: dp(200)
+	auto_dismiss: False
+	
+	BoxLayout:
+		orientation: 'vertical'
+		spacing: dp(10)
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint_y: None
+			height: dp(30)
+
+			Label:
+				size_hint_x: .3
+				text: "Word:"
+
+			TextInput:
+				id: wordTextInp
+				size_hint_x: .7
+				multiline: False
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint_y: None
+			height: dp(30)
+			
+			Label:
+				size_hint_x: .3
+				text: "Translate:"
+
+			TextInput:
+				id: translateTextInp
+				size_hint_x: .7
+				multiline: False
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint_y: None
+			height: dp(50)
+
+			Button:
+				text: "Save word"
+				on_release: root.saveWord()
+
+			Button:
+				text: "Back"
+				on_release: root.dismiss()

@@ -40,14 +40,15 @@
 		RecycleView:
 			id: dict_rv
 			key_viewclass: 'viewclass'
-			data: root.getWordsRecycleData()
 
 			RecycleBoxLayout:
 				orientation: 'vertical'
-				default_size: None, dp(80)
+				default_size: None, dp(50)
 				default_size_hint: 1, None
 				size_hint_y: None
 				height: self.minimum_height
+				padding: dp(5)
+				spacing: dp(5)
 
 		BoxLayout:
 			orientation: 'horizontal'
@@ -64,9 +65,19 @@
 					app.screen.transition.direction = 'left'
 					app.screen.current = 'mainScr'
 
-<WordListElem>:
+<DictListItem>:
+	orientation: 'horizontal'
+
 	Label:
-		text: "Word"
+		size_hint_x: 0.7
+		text: "{} - {}".format(root.word, root.translate)
+
+	Button:
+		size_hint_x: 0.3
+		text: "Del"
+		on_release:
+			app.deleteWord(root.number)
+			app.screen.get_screen('dictScr').updateWordsList()
 
 <NewWordPopup>:
 	title: "New word"
@@ -118,4 +129,6 @@
 
 			Button:
 				text: "Back"
-				on_release: root.dismiss()
+				on_release:
+					app.screen.get_screen('dictScr').updateWordsList()
+					root.dismiss()

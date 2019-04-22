@@ -43,12 +43,31 @@ class NewWordPopup(Popup):
 		self.ids.wordTextInp.text = ""
 		self.ids.translateTextInp.text = ""
 
-class DictionaryScreen(Screen):
-	def getWordsRecycleData(self):
-		return [{"viewclass":"Label", "text":"Hello "+str(i)} for i in range(100)]
+class DictListItem(BoxLayout):
+	word = StringProperty()
+	translate = StringProperty()
+	number = StringProperty()
 
+class DictionaryScreen(Screen):
+	def on_enter(self):
+		self.updateWordsList()
+	
 	def updateWordsList(self):
-		print("Hi!!!")
+		self.ids.dict_rv.data = self.getWordsRecycleData()
+
+	def getWordsRecycleData(self):
+		recycleData = []
+
+		for wordNumber, wordData in wordsTrainApp.getWords(wordsTrainApp).items():
+			recycleData.append({"viewclass": "DictListItem", 
+								"word":		 wordData['word'],
+								"translate": wordData['translate'],
+								"number": 	 wordNumber})
+
+		if not recycleData:
+			return [{"viewclass": "Label", "text":"Dictionary is empty"}]
+
+		return recycleData
 
 class MainScreen(Screen):
 	pass
@@ -61,10 +80,15 @@ class wordsTrainApp(App):
 		self.screen = Factory.AppScreens()
 		return self.screen
 
+	def getWords(self):
+		return {key: self.storeData.get(key) for key in [number for number in self.storeData.keys()]}
+
 	def addWord(self, wordForm):
 		nextNumber = self.getLastEntryNumber(self) + 1
 		self.storeData.put(str(nextNumber), **wordForm)
-		DictionaryScreen.updateWordsList(DictionaryScreen)
+
+	def deleteWord(self, wordNumber):
+		self.storeData.delete(wordNumber)
 
 	def getLastEntryNumber(self):
 		if (self.storeData):

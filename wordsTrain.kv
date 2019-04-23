@@ -47,8 +47,8 @@
 				default_size_hint: 1, None
 				size_hint_y: None
 				height: self.minimum_height
-				padding: dp(5)
-				spacing: dp(5)
+				padding: dp(10)
+				spacing: dp(10)
 
 		BoxLayout:
 			orientation: 'horizontal'
@@ -68,9 +68,22 @@
 <DictListItem>:
 	orientation: 'horizontal'
 
-	Label:
+	BoxLayout:
+		orientation: 'vertical'
 		size_hint_x: 0.7
-		text: "{} - {}".format(root.word, root.translate)
+
+		Label:
+			text_size: self.size
+			halign: 'left'
+			valign: 'center'
+			text: "{} - {}".format(root.word, root.translate)
+
+		Label:
+			text_size: self.size
+			halign: 'left'
+			valign: 'center'
+			font_size: sp(12)
+			text: "Weight: {}".format(root.weight)
 
 	Button:
 		size_hint_x: 0.3

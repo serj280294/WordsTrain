@@ -46,6 +46,7 @@ class NewWordPopup(Popup):
 class DictListItem(BoxLayout):
 	word = StringProperty()
 	translate = StringProperty()
+	weight = StringProperty()
 	number = StringProperty()
 
 class DictionaryScreen(Screen):
@@ -62,6 +63,7 @@ class DictionaryScreen(Screen):
 			recycleData.append({"viewclass": "DictListItem", 
 								"word":		 wordData['word'],
 								"translate": wordData['translate'],
+								"weight":	 str(wordData['weight']),
 								"number": 	 wordNumber})
 
 		if not recycleData:
